@@ -65,11 +65,11 @@ class Server(Base):
     """
     __tablename__ = 'servers'
     id = Column(Integer, primary_key=True)
-    proto = Column(Unicode, default='http')
-    ip = Column(Unicode, default='')
+    proto = Column(Unicode(10), default='http')
+    ip = Column(Unicode(20), default='')
     port = Column(Integer, default=random_port)
-    base_url = Column(Unicode, default='/')
-    cookie_name = Column(Unicode, default='cookie')
+    base_url = Column(Unicode(255), default='/')
+    cookie_name = Column(Unicode(255), default='cookie')
     
     def __repr__(self):
         return "<Server(%s:%s)>" % (self.ip, self.port)
@@ -272,7 +272,7 @@ class User(Base):
     """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(Unicode)
+    name = Column(Unicode(255))
     # should we allow multiple servers per user?
     _server_id = Column(Integer, ForeignKey('servers.id'))
     server = relationship(Server, primaryjoin=_server_id == Server.id)
@@ -280,8 +280,8 @@ class User(Base):
     last_activity = Column(DateTime, default=datetime.utcnow)
     
     api_tokens = relationship("APIToken", backref="user")
-    cookie_id = Column(Unicode, default=new_token)
-    state = Column(JSONDict)
+    cookie_id = Column(Unicode(500), default=new_token)
+    state = Column(JSONDict(1000))
     spawner = None
     spawn_pending = False
     stop_pending = False
@@ -451,8 +451,8 @@ class APIToken(Base):
         return Column(Integer, ForeignKey('users.id'))
 
     id = Column(Integer, primary_key=True)
-    hashed = Column(Unicode)
-    prefix = Column(Unicode)
+    hashed = Column(Unicode(500))
+    prefix = Column(Unicode(255))
     prefix_length = 4
     algorithm = "sha512"
     rounds = 16384
