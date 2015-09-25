@@ -37,7 +37,7 @@ def wait_for_server(ip, port, timeout=10):
         try:
             socket.create_connection((ip, port))
         except socket.error as e:
-            if e.errno != errno.ECONNREFUSED:
+            if e.errno not in (errno.ECONNREFUSED, errno.ENETUNREACH):
                 app_log.error("Unexpected error waiting for %s:%i %s",
                     ip, port, e
                 )
