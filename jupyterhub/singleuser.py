@@ -123,7 +123,6 @@ page_template = """
 {% extends "templates/page.html" %}
 
 {% block header_buttons %}
-{{super()}}
 
 {% endblock %}
 """
