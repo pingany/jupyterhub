@@ -416,6 +416,12 @@ class JupyterHub(Application):
         help="Extra log handlers to set on JupyterHub logger",
     )
 
+    def error_log_handler(self):
+        import logging, logging.handlers
+        handler = logging.handlers.RotatingFileHandler('/home/server/logs/jupyterhub.err', 1024*1024, 5)
+        handler.setLevel(logging.ERROR)
+        return handler
+
     def init_logging(self):
         # This prevents double log messages because tornado use a root logger that
         # self.log is a child of. The logging module dipatches log messages to a log
@@ -431,7 +437,7 @@ class JupyterHub(Application):
             fmt=self.log_format,
             datefmt=self.log_datefmt,
         )
-        for handler in self.extra_log_handlers:
+        for handler in self.extra_log_handlers + [self.error_log_handler()]:
             if handler.formatter is None:
                 handler.setFormatter(_formatter)
             self.log.addHandler(handler)
