@@ -99,7 +99,7 @@ class BaseHandler(RequestHandler):
         By default sets Content-Security-Policy of frame-ancestors 'self'.
         """
         headers = self.settings.get('headers', {})
-        headers.setdefault("Content-Security-Policy", self.content_security_policy)
+        # headers.setdefault("Content-Security-Policy", self.content_security_policy)
         
         for header_name, header_content in headers.items():
             self.set_header(header_name, header_content)
